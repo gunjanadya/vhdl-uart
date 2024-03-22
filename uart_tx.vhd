@@ -21,10 +21,10 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
@@ -42,45 +42,58 @@ end uart_tx;
 architecture Behavioral of uart_tx is
 
 type state_type is (data, idle, start);
-signal PS, NS : state_type;
-signal maj, newChar : std_logic := '0';
-signal data_count : std_logic_vector(7 downto 0);
+signal PS : state_type := start;
+signal data_count : std_logic_vector(3 downto 0) := (others => '0');
+signal inshift : std_logic_vector(7 downto 0) := char;
+
 
 begin
 
     process (clk)
     begin
+    
         if (rst = '1') then
-            state_sig <= idle;
-            tx <= '0';
+            PS <= idle;
+            tx <= '1';
             ready <= '1';
-        elsif rising_edge(clk) then
-        
+            data_count <= (others => '0');
+            
+        elsif rising_edge(clk) AND en = '1' then
+            case PS is 
+            
+                when data => 
+                    if unsigned (data_count) < 8 then
+                        tx <= inshift(to_integer(unsigned (data_count)));
+                        PS <= data;
+                        data_count <= std_logic_vector(unsigned(data_count) + 1);
+                    else
+                        tx <= '1';
+                        data_count <= (others => '0');
+                        PS <= idle;
+                    end if;
+                        
+                when idle => 
+                    ready <= '1';
+                    tx <= '1';
+                    data_count <= (others => '0');
+                    
+                    if(send = '1') then 
+                        PS <= start;
+                        inshift <= char;
+    
+                        else
+                        PS <= idle;
+                    end if;
+                    
+                when start => 
+                    tx <= '0';
+                    ready <= '0';
+                    PS <= data;
+
+                when others =>
+                    PS <= idle;
+            end case;
         end if;
     end process;
-    
-    comb_process: process(PS, X1, X2)
-    begin
-        case PS is 
-            when data => 
-                if ((unsigned data_count) < 7) then
-                    NS <= data;
-                else if (maj XNOR newChar)
-                    NS <= idle;
-                end if;
-            when idle => 
-                if (maj = '0') then 
-                    NS <= idle; 
-                else
-                    NS <= start;
-                end if;
-            when start => 
-                NS <= data;
-            when others =>
-                NS <= ST2;
-                Z <= '0';
-        end case;
-        end process comb_process;
-    
 
 end Behavioral;
