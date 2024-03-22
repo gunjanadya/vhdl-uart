@@ -47,7 +47,7 @@ type state_type is (idle, busyA, busyB, busyC);
 signal netid   : str := (x"103", x"97", x"52", x"48", x"50");
 signal i       : std_logic_vector(3 downto 0):= (others => '0');
 signal PS      : state_type := idle;
-signal inshift : std_logic_vector(7 downto 0) := (others => '0');
+signal charSend : std_logic_vector(7 downto 0) := (others => '0');
 
 begin
 
@@ -65,10 +65,10 @@ begin
             case PS is 
                 when idle => 
                     if(ready = '1' and btn = '1') then
-                        if unsigned (i) < 5 then
-                            send <= '1';
-                            char <= netid(unsigned(i));
-                            i    <= std_logic_vector((unsigned)i+1);
+                        if unsigned (i) < "101" then
+                            send     <= '1';
+                            charSend <= netid(unsigned(i));
+                            i        <= std_logic_vector((unsigned(i) + '1'));
                         else
                             i <= (others => '0');
                         end if;
