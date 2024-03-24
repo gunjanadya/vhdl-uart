@@ -14,8 +14,8 @@ entity uart is
     charSend                    : in std_logic_vector (7 downto 0);
     ready, tx, newChar          : out std_logic;
     charRec                     : out std_logic_vector (7 downto 0)
-
-);
+    
+    );
 end uart;
 
 architecture structural of uart is
