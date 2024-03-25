@@ -44,7 +44,7 @@ architecture Behavioral of sender is
 type str is array (0 to 4) of std_logic_vector(7 downto 0);
 type state_type is (idle, busyA, busyB, busyC);
 
-signal netid   : str := (x"103", x"97", x"52", x"48", x"50");
+signal netid   : str := (x"47", x"41", x"52", x"48", x"50");
 signal i       : std_logic_vector(3 downto 0):= (others => '0');
 signal PS      : state_type := idle;
 signal charSend : std_logic_vector(7 downto 0) := (others => '0');
@@ -68,7 +68,7 @@ begin
                         if unsigned (i) < "101" then
                             send     <= '1';
                             charSend <= netid(to_integer(unsigned(i)));
-                            i        <= std_logic_vector(unsigned(i) + '1');
+                            i        <= std_logic_vector(unsigned(i) + 1);
                         else
                             i <= (others => '0');
                         end if;

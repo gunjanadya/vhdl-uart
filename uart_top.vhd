@@ -121,7 +121,7 @@ begin
             tx => RXD
         );
 
---    CTS <= '0';
---    RTS <= '0';
+    CTS <= '0';
+    RTS <= '0';
 
 end Behavioral;
