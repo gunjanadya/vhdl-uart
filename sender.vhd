@@ -24,7 +24,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
@@ -67,8 +67,8 @@ begin
                     if(ready = '1' and btn = '1') then
                         if unsigned (i) < "101" then
                             send     <= '1';
-                            charSend <= netid(unsigned(i));
-                            i        <= std_logic_vector((unsigned(i) + '1'));
+                            charSend <= netid(to_integer(unsigned(i)));
+                            i        <= std_logic_vector(unsigned(i) + '1');
                         else
                             i <= (others => '0');
                         end if;

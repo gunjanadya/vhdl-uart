@@ -33,8 +33,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity uart_top is
   Port ( 
-    TXD, clk      : in std_logic;
-    btn           : in std_logic_vector(1 downto 0);
+    TXD, clk      : in  std_logic;
+    btn           : in  std_logic_vector(1 downto 0);
     CTS, RTS, RXD : out std_logic
   );
 end uart_top;
@@ -43,8 +43,8 @@ architecture Behavioral of uart_top is
 
     component debouncer is
         port(
-          btn  : in std_logic;
-          clk  : in std_logic;
+          btn  : in  std_logic;
+          clk  : in  std_logic;
           dbnc : out std_logic := '0'
         );
     end component;
@@ -58,7 +58,7 @@ architecture Behavioral of uart_top is
 
     component sender is
       port ( 
-          rst, clk, nbl, btn, ready : in std_logic;
+          rst, clk, nbl, btn, ready : in  std_logic;
           send                      : out std_logic;
           char                      : out std_logic_vector (7 downto 0)
       );
@@ -66,8 +66,8 @@ architecture Behavioral of uart_top is
     
     component uart is
       port ( 
-        clk, en, send, rx, rst      : in std_logic;
-        charSend                    : in std_logic_vector (7 downto 0);
+        clk, en, send, rx, rst      : in  std_logic;
+        charSend                    : in  std_logic_vector (7 downto 0);
         ready, tx, newChar          : out std_logic;
         charRec                     : out std_logic_vector (7 downto 0)
       );
@@ -121,7 +121,7 @@ begin
             tx => RXD
         );
 
-    CTS <= '0';
-    RTS <= '0';
+--    CTS <= '0';
+--    RTS <= '0';
 
 end Behavioral;
